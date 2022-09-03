@@ -25,12 +25,12 @@ public class MouseController : MonoBehaviour {
         RaycastHit2D? hit = GetFocusedOnTile();
 
         if (hit.HasValue) {
-            OverlayTile overlayTile = hit.Value.collider.gameObject.GetComponent<OverlayTile>();
+            OverlayTile overlayTile = hit.Value.collider.gameObject.GetComponentInChildren<OverlayTile>();
             cursor.transform.position = overlayTile.transform.position;
-            cursor.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.transform.GetComponent<SpriteRenderer>().sortingOrder;
+            cursor.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.transform.GetComponentInChildren<SpriteRenderer>().sortingOrder;
 
             if (Input.GetMouseButtonDown(0)) {
-                overlayTile.gameObject.GetComponent<OverlayTile>().ShowTile();
+                overlayTile.gameObject.GetComponentInChildren<OverlayTile>().ShowTile();
 
                 if (_characterInfo == null) {
                     _characterInfo = Instantiate(characterPrefab).GetComponent<CharacterInfo>();
@@ -38,7 +38,7 @@ public class MouseController : MonoBehaviour {
                     _characterInfo.activeTile = overlayTile;
                 } else {
                     path = _pathFinder.FindPath(_characterInfo.activeTile, overlayTile);
-                    overlayTile.gameObject.GetComponent<OverlayTile>().HideTile();
+                   // overlayTile.gameObject.GetComponentInChildren<OverlayTile>().HideTile();
                 }
             }
         }

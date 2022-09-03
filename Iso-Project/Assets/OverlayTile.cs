@@ -21,10 +21,10 @@ public class OverlayTile : MonoBehaviour {
     }
 
     public void HideTile() {
-        gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+        gameObject.GetComponentInChildren<SpriteRenderer>().color = new Color(1, 1, 1, 0);
     }
     public void ShowTile() {
-        gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+        gameObject.GetComponentInChildren<SpriteRenderer>().color = new Color(1, 1, 1, 1);
     }
 
 }

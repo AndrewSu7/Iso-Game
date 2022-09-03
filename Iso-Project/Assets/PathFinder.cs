@@ -26,7 +26,7 @@ public class PathFinder {
             foreach (var neighbour in GetNeighbourTiles(currentOverlayTile)) {
 
                 //jump height = 1
-                if (neighbour.isBlocked || closedList.Contains(neighbour) || Mathf.Abs(currentOverlayTile.gridLocation.z - neighbour.gridLocation.z) > 1); {
+                if (neighbour.isBlocked || closedList.Contains(neighbour) || Mathf.Abs(currentOverlayTile.transform.position.z - neighbour.transform.position.z) > 1) {
                     continue;
                 }
                 neighbour.S = GetManhattenDistance(start, neighbour);
