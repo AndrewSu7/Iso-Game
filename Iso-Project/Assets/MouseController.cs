@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class MouseController : MonoBehaviour {
 
+    public int movementRange;
+
 
     public float speed;
     public GameObject cursor;
@@ -33,6 +35,7 @@ public class MouseController : MonoBehaviour {
 
             if (Input.GetMouseButtonDown(0)) {
                 overlayTile.gameObject.GetComponentInChildren<OverlayTile>().ShowTile();
+                overlayTile.gameObject.GetComponentInChildren<OverlayTile>().HideTile();
 
                 if (_characterInfo == null) {
                     _characterInfo = Instantiate(characterPrefab).GetComponent<CharacterInfo>();
@@ -40,7 +43,7 @@ public class MouseController : MonoBehaviour {
                     GetInRangeTiles();
                    // _characterInfo.activeTile = overlayTile;
                 } else {
-                    path = _pathFinder.FindPath(_characterInfo.activeTile, overlayTile);
+                    path = _pathFinder.FindPath(_characterInfo.activeTile, overlayTile, inRangeTiles);
                  
                 }
             }
@@ -54,7 +57,7 @@ public class MouseController : MonoBehaviour {
         foreach (var item in inRangeTiles) {
             item.HideTile();
         }
-        inRangeTiles = _rangeFinder.GetTilesInRange(_characterInfo.activeTile, 2);
+        inRangeTiles = _rangeFinder.GetTilesInRange(_characterInfo.activeTile, movementRange);
 
         foreach (var item in inRangeTiles) {
             item.ShowTile();

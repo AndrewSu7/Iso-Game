@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 
 public class PathFinder {
-    public List<OverlayTile> FindPath(OverlayTile start, OverlayTile end) {
+    public List<OverlayTile> FindPath(OverlayTile start, OverlayTile end, List<OverlayTile> searchableTiles) {
 
         List<OverlayTile> openList = new List<OverlayTile>(); //list of tile we want to check next loop
         List<OverlayTile> closedList = new List<OverlayTile>(); // list of tiles we no longer want to check
@@ -23,12 +23,12 @@ public class PathFinder {
                 return GetFinishedList(start, end);
             }
 
-            foreach (var neighbour in GetNeighbourTiles(currentOverlayTile)) {
-
-                //jump height = 1
-                if (neighbour.isBlocked || closedList.Contains(neighbour) || Mathf.Abs(currentOverlayTile.transform.position.z - neighbour.transform.position.z) > 2) {
+            var neighbourTiles = MapManager.Instance.GetNeighbourTiles(currentOverlayTile, searchableTiles);
+            foreach (var neighbour in neighbourTiles) {                //jump height = 1
+                if (neighbour.isBlocked || closedList.Contains(neighbour)) {
                     continue;
                 }
+
                 neighbour.S = GetManhattenDistance(start, neighbour);
                 neighbour.E = GetManhattenDistance(end, neighbour);
                 neighbour.previous = currentOverlayTile;
