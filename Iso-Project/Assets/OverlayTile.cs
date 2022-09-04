@@ -14,11 +14,11 @@ public class OverlayTile : MonoBehaviour {
     public Vector3Int gridLocation;
 
 
-    private void Update() {
+    /*private void Update() {
         if (Input.GetMouseButtonDown(0)) {
             HideTile();
         }
-    }
+    }*/
 
     public void HideTile() {
         gameObject.GetComponentInChildren<SpriteRenderer>().color = new Color(1, 1, 1, 0);

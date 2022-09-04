@@ -51,9 +51,41 @@ public class MapManager : MonoBehaviour {
             }
         }
     }
+    public List<OverlayTile> GetNeighbourTiles(OverlayTile currentOverlayTile) {
+        List<OverlayTile> neighbours = new List<OverlayTile>();
 
-    // Update is called once per frame
-    void Update() {
+        //top
+        Vector2Int locationToCheck = new Vector2Int(currentOverlayTile.gridLocation.x, currentOverlayTile.gridLocation.y + 1);
+        if (map.ContainsKey(locationToCheck)) {
+            if (Mathf.Abs(currentOverlayTile.gridLocation.z - map[locationToCheck].gridLocation.z) <= 2){ 
+            neighbours.Add(map[locationToCheck]);
+            }
+        }
 
+        //botom
+        locationToCheck = new Vector2Int(currentOverlayTile.gridLocation.x, currentOverlayTile.gridLocation.y - 1);
+        if (map.ContainsKey(locationToCheck)) {
+            if (Mathf.Abs(currentOverlayTile.gridLocation.z - map[locationToCheck].gridLocation.z) <= 2){
+                neighbours.Add(map[locationToCheck]);
+            }
+        }
+
+        //right
+        locationToCheck = new Vector2Int(currentOverlayTile.gridLocation.x + 1, currentOverlayTile.gridLocation.y);
+        if (map.ContainsKey(locationToCheck)) {
+            if (Mathf.Abs(currentOverlayTile.gridLocation.z - map[locationToCheck].gridLocation.z) <= 2){
+                neighbours.Add(map[locationToCheck]);
+            }
+        }
+
+        //left
+        locationToCheck = new Vector2Int(currentOverlayTile.gridLocation.x - 1, currentOverlayTile.gridLocation.y);
+        if (map.ContainsKey(locationToCheck)) {
+            if (Mathf.Abs(currentOverlayTile.gridLocation.z - map[locationToCheck].gridLocation.z) <= 2) {
+                neighbours.Add(map[locationToCheck]);
+            }
+        }
+        return neighbours;
     }
+
 }

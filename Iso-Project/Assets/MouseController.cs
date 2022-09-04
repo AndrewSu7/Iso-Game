@@ -7,18 +7,20 @@ using UnityEngine;
 public class MouseController : MonoBehaviour {
 
 
+    public float speed;
     public GameObject cursor;
     public GameObject characterPrefab;
-    public float speed;
     private CharacterInfo _characterInfo;
 
 
     private PathFinder _pathFinder;
-    private List<OverlayTile> path;
+    private RangeFinder _rangeFinder;
+    private List<OverlayTile> path = new List<OverlayTile>();
+    private List<OverlayTile> inRangeTiles = new List<OverlayTile>();
 
     private void Start() {
         _pathFinder = new PathFinder();
-        path = new List<OverlayTile>();
+        _rangeFinder = new RangeFinder();
     }
 
     void LateUpdate() {
@@ -27,7 +29,7 @@ public class MouseController : MonoBehaviour {
         if (hit.HasValue) {
             OverlayTile overlayTile = hit.Value.collider.gameObject.GetComponentInChildren<OverlayTile>();
             cursor.transform.position = overlayTile.transform.position;
-            cursor.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.transform.GetComponentInChildren<SpriteRenderer>().sortingOrder;
+            cursor.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.GetComponentInChildren<SpriteRenderer>().sortingOrder;
 
             if (Input.GetMouseButtonDown(0)) {
                 overlayTile.gameObject.GetComponentInChildren<OverlayTile>().ShowTile();
@@ -35,15 +37,27 @@ public class MouseController : MonoBehaviour {
                 if (_characterInfo == null) {
                     _characterInfo = Instantiate(characterPrefab).GetComponent<CharacterInfo>();
                     PositionCharacterOnTile(overlayTile);
-                    _characterInfo.activeTile = overlayTile;
+                    GetInRangeTiles();
+                   // _characterInfo.activeTile = overlayTile;
                 } else {
                     path = _pathFinder.FindPath(_characterInfo.activeTile, overlayTile);
-                   // overlayTile.gameObject.GetComponentInChildren<OverlayTile>().HideTile();
+                 
                 }
             }
         }
         if (path.Count > 0) {
             MoveAlongPath();
+        }
+    }
+
+    private void GetInRangeTiles() {
+        foreach (var item in inRangeTiles) {
+            item.HideTile();
+        }
+        inRangeTiles = _rangeFinder.GetTilesInRange(_characterInfo.activeTile, 2);
+
+        foreach (var item in inRangeTiles) {
+            item.ShowTile();
         }
     }
 
@@ -57,6 +71,10 @@ public class MouseController : MonoBehaviour {
         if (Vector2.Distance(_characterInfo.transform.position, path[0].transform.position) < 0.0001f) {
             PositionCharacterOnTile(path[0]);
             path.RemoveAt(0);
+        }
+
+        if (path.Count == 0) { 
+        GetInRangeTiles();
         }
     }
 
